@@ -1,0 +1,29 @@
+{
+  "name": "Tvoje Jméno",
+  "skills": [
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "Git",
+    "Web development",
+    "API design"
+  ],
+  "interests": [
+    "Web development",
+    "Herní grafika",
+    "AI nástroje",
+    "Open source"
+  ],
+  "projects": [
+    {
+      "title": "Osobní web",
+      "description": "Jednostránkový profil na GitHub Pages s dynamickým načítáním dat",
+      "link": "https://github.com"
+    },
+    {
+      "title": "To-Do aplikace",
+      "description": "Jednoduchá aplikace pro správu úkolů",
+      "link": "https://github.com"
+    }
+  ]
+}
