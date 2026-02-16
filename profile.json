@@ -1,18 +1,12 @@
 {
-  "name": "Tvoje Jméno",
+  "name": "Matyáš Průša",
   "skills": [
-    "HTML",
-    "CSS",
-    "JavaScript",
-    "Git",
-    "Web development",
-    "API design"
+    "Student (IT)"
   ],
   "interests": [
-    "Web development",
-    "Herní grafika",
-    "AI nástroje",
-    "Open source"
+    "Trávit čas s kamarády",
+    "Bojové sporty",
+    "Počítačové hry"
   ],
   "projects": [
     {
