@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do Aplikace</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .todo-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .todo-input-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .todo-input-wrapper input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .todo-input-wrapper button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .todo-input-wrapper button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .todo-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .todo-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .todo-item.completed {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-item span {
+            flex: 1;
+        }
+
+        .todo-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .todo-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-check {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #45a049;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #da190b;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 1.1em;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">← Zpět na hlavní stránku</a>
+            <h1>To-Do Aplikace</h1>
+            <p>Správa úkolů</p>
+        </header>
+
+        <main>
+            <div class="todo-container">
+                <div class="todo-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="todoInput" 
+                        placeholder="Zadej nový úkol..."
+                    >
+                    <button onclick="addTodo()">Přidat</button>
+                </div>
+
+                <ul class="todo-list" id="todoList"></ul>
+
+                <div id="emptyState" class="empty-state">
+                    <p>🎯 Zatím žádné úkoly. Přidej si první!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let todos = JSON.parse(localStorage.getItem('todos')) || [];
+
+        function renderTodos() {
+            const todoList = document.getElementById('todoList');
+            const emptyState = document.getElementById('emptyState');
+
+            todoList.innerHTML = '';
+
+            if (todos.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            todos.forEach((todo, index) => {
+                const li = document.createElement('li');
+                li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+
+                li.innerHTML = `
+                    <span>${escapeHtml(todo.text)}</span>
+                    <div class="todo-buttons">
+                        <button class="todo-btn btn-check" onclick="toggleTodo(${index})">
+                            ${todo.completed ? '↩️ Zrušit' : '✓ Hotovo'}
+                        </button>
+                        <button class="todo-btn btn-delete" onclick="deleteTodo(${index})">
+                            🗑️ Smazat
+                        </button>
+                    </div>
+                `;
+
+                todoList.appendChild(li);
+            });
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+
+            if (text === '') {
+                alert('Prosím, zadej úkol!');
+                return;
+            }
+
+            todos.push({
+                text: text,
+                completed: false
+            });
+
+            localStorage.setItem('todos', JSON.stringify(todos));
+            input.value = '';
+            renderTodos();
+        }
+
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            renderTodos();
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            localStorage.setItem('todos', JSON.stringify(todos));
+            renderTodos();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Odesílání formuláře Enterem
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('todoInput');
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTodo();
+                }
+            });
+            renderTodos();
+        });
+    </script>
+</body>
+</html>

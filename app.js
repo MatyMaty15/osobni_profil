@@ -70,15 +70,25 @@ function renderProjects(projects) {
         const description = document.createElement('p');
         description.textContent = project.description;
 
-        const link = document.createElement('a');
-        link.href = project.link;
-        link.target = '_blank';
-        link.textContent = 'Zobrazit projekt';
-        link.className = 'project-link';
-
         div.appendChild(title);
         div.appendChild(description);
-        div.appendChild(link);
+
+        // Pokud je to To-Do aplikace, otevře todo.html
+        if (project.title === 'To-Do aplikace') {
+            const link = document.createElement('a');
+            link.href = 'todo.html';
+            link.textContent = 'Zobrazit projekt';
+            link.className = 'project-link';
+            div.appendChild(link);
+        } else {
+            // Jinak otevře externě odkaz
+            const link = document.createElement('a');
+            link.href = project.link;
+            link.target = '_blank';
+            link.textContent = 'Zobrazit projekt';
+            link.className = 'project-link';
+            div.appendChild(link);
+        }
 
         projectsSection.appendChild(div);
     });
